@@ -11,7 +11,8 @@
     "build:pages": "node scripts/build-pages.mjs",
     "start": "node --env-file-if-exists=.env server/index.mjs",
     "export": "node --env-file-if-exists=.env scripts/export.mjs",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "test:pages": "node --test --test-timeout=30000 tests/api.test.mjs tests/github.test.mjs"
   },
   "dependencies": {
     "fflate": "^0.8.2",

@@ -12,7 +12,7 @@ GitHub 模式使用公开仓库与 GitHub Pages，普通访客只加载静态文
 
 1. 将本项目代码推送到 GitHub 的 `main` 分支。
 2. 仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。已有自动配置时无需重复操作。
-3. `.github/workflows/pages.yml` 自动测试、构建 `pages-output/`，再部署至 Pages。可在仓库 Actions 页面查看结果。
+3. `.github/workflows/pages.yml` 自动运行 `npm run test:pages`，检查实际部署的 GitHub 发布及请求处理功能，构建 `pages-output/`，再部署至 Pages。可在仓库 Actions 页面查看结果。完整本地 Node.js 后台测试仍使用 `npm test`。
 4. 网站负责人在 GitHub **Settings → Developer settings → Personal access tokens → Fine-grained tokens** 创建仅授权此仓库的密钥，Repository permissions 的 **Contents** 设置为 **Read and write**，并设置有效期。
 5. 在线上工作台粘贴发布密钥后进入。日常只需编辑表单、保存草稿、点击“发布官网”。无需客户编辑文件或操作 Git。
 
