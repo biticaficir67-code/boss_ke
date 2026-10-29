@@ -1,0 +1,15 @@
+node_modules/
+dist/
+pages-output/
+site-output/
+site-output.zip
+.site-output-*
+.data/
+.env
+.env.*
+!.env.example
+.idea/
+*.log
+coverage/
+test-results/
+.DS_Store
