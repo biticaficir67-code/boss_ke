@@ -65,8 +65,8 @@
     }
   },
   "published": {
-    "id": "1793322666194-26465e6c",
-    "createdAt": "2026-10-30T01:11:06.194Z",
+    "id": "1793322718992-c6e4df9e",
+    "createdAt": "2026-10-30T01:11:58.992Z",
     "revision": 2,
     "content": {
       "schemaVersion": 1,
@@ -141,6 +141,73 @@
     }
   ],
   "history": [
+    {
+      "id": "1793322718992-c6e4df9e",
+      "createdAt": "2026-10-30T01:11:58.992Z",
+      "revision": 2,
+      "content": {
+        "schemaVersion": 1,
+        "brand": {
+          "name": "雾海来信",
+          "englishName": "LETTERS FROM THE MIST",
+          "studio": "拾光工作室",
+          "contact": ""
+        },
+        "hero": {
+          "eyebrow": "一场写给远方的独立冒险",
+          "title": "越过雾海，\n寻找世界的回音。",
+          "subtitle": "带上一封没有署名的信，驶向被遗忘的群岛。在潮汐与星光之间，发现属于你的故事。",
+          "interval": 5500,
+          "slides": [
+            {
+              "id": "scene-1",
+              "src": "/sample-art/island.svg",
+              "alt": "暮色海面上，一座亮着灯的孤岛",
+              "caption": "01 / 在潮汐之间"
+            },
+            {
+              "id": "scene-2",
+              "src": "/sample-art/forest.svg",
+              "alt": "星光落入幽静的森林与山谷",
+              "caption": "02 / 听见森林的呼吸"
+            },
+            {
+              "id": "scene-3",
+              "src": "/sample-art/journey.svg",
+              "alt": "旅人沿着沙丘走向远方的遗迹",
+              "caption": "03 / 抵达故事的另一端"
+            },
+            {
+              "id": "90118d40-0c37-4644-8063-11150d440d29",
+              "src": "/uploads/f7443860-1aa3-4893-b79f-4c2d1207754c.webp",
+              "alt": "战桃",
+              "caption": "04 / 愿与你同行"
+            }
+          ]
+        },
+        "about": {
+          "eyebrow": "关于这段旅程",
+          "title": "世界很大，\n每一次相遇都有回响。",
+          "body": "这是一份用于演示官网功能的虚构游戏介绍。你将在这里展示真正的游戏故事、玩法与创作理念。\n\n探索迷雾中的岛屿，收集散落的信件，与沿途的角色相遇。放慢脚步，让好奇心带你走向下一处风景。",
+          "features": [
+            "自由探索",
+            "叙事冒险",
+            "温柔的手绘世界"
+          ]
+        },
+        "download": {
+          "enabled": true,
+          "title": "下一段冒险，\n由你亲手启程。",
+          "description": "安装包由网盘中转，关注小柯哟~",
+          "buttonText": "启动冒险",
+          "url": "",
+          "version": "待发布",
+          "platform": "Windows",
+          "fileSize": "1mb",
+          "extractionCode": ""
+        }
+      }
+    },
     {
       "id": "1793322666194-26465e6c",
       "createdAt": "2026-10-30T01:11:06.194Z",
