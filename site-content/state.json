@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "revision": 1,
-  "updatedAt": "2026-10-29T15:50:48.049Z",
+  "revision": 2,
+  "updatedAt": "2026-10-30T01:10:58.578Z",
   "content": {
     "schemaVersion": 1,
     "brand": {
@@ -33,6 +33,12 @@
           "src": "/sample-art/journey.svg",
           "alt": "旅人沿着沙丘走向远方的遗迹",
           "caption": "03 / 抵达故事的另一端"
+        },
+        {
+          "id": "90118d40-0c37-4644-8063-11150d440d29",
+          "src": "/uploads/f7443860-1aa3-4893-b79f-4c2d1207754c.webp",
+          "alt": "战桃",
+          "caption": "04 / 愿与你同行"
         }
       ]
     },
@@ -48,13 +54,13 @@
     },
     "download": {
       "enabled": true,
-      "title": "下一封来信，\n等你亲手打开。",
-      "description": "在这里填写版本介绍、运行要求或安装说明。安装包由你的下载平台提供。",
-      "buttonText": "下载游戏",
+      "title": "下一段冒险，\n由你亲手启程。",
+      "description": "安装包由网盘中转，关注小柯哟~",
+      "buttonText": "启动冒险",
       "url": "",
       "version": "待发布",
-      "platform": "Windows / macOS",
-      "fileSize": "待填写",
+      "platform": "Windows",
+      "fileSize": "1mb",
       "extractionCode": ""
     }
   },
