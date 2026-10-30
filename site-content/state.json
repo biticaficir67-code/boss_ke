@@ -119,7 +119,15 @@
       }
     }
   },
-  "uploads": [],
+  "uploads": [
+    {
+      "id": "f7443860-1aa3-4893-b79f-4c2d1207754c",
+      "src": "/uploads/f7443860-1aa3-4893-b79f-4c2d1207754c.webp",
+      "name": "aa5c498a2ca37feb6e9a04c165467e8a.jpg",
+      "bytes": 41828,
+      "createdAt": "2026-10-30T01:09:11.455Z"
+    }
+  ],
   "history": [
     {
       "id": "1793290737889-fc228365",
