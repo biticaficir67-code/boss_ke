@@ -1,0 +1,9 @@
+node_modules/
+pages-output/
+dist/
+site-output/
+.data/
+test-results/
+site-content/
+package-lock.json
+public/

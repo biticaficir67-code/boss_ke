@@ -1,11 +1,13 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
+// Vite 只构建管理后台；公开官网由 build-pages.mjs 生成。
 export default defineConfig({
   plugins: [vue()],
-  server: {
-    watch: { ignored: ['**/.data/**', '**/site-output/**', '**/site-output.zip'] },
-    fs: { deny: ['.env', '.env.*', '**/.git/**', '**/.data/**', '**/*.{crt,pem}'] },
+  base: './',
+  build: {
+    outDir: 'pages-output/admin',
+    assetsDir: 'app-assets',
+    emptyOutDir: true,
   },
-  build: { outDir: 'dist', assetsDir: 'app-assets' },
 });

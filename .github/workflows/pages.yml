@@ -7,7 +7,6 @@ on:
       - 'site-content/state.json'
       - 'site-content/uploads/**'
       - '**.md'
-      - '.env.example'
   workflow_dispatch:
 
 permissions:
@@ -28,8 +27,8 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
-      - run: npm run test:pages
-      - run: npm run build:pages
+      - run: npm test
+      - run: npm run build
       - uses: actions/upload-pages-artifact@v4
         with:
           path: pages-output

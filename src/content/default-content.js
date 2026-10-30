@@ -1,16 +1,36 @@
 export function defaultContent() {
   return {
     schemaVersion: 1,
-    brand: { name: '雾海来信', englishName: 'LETTERS FROM THE MIST', studio: '拾光工作室', contact: '' },
+    brand: {
+      name: '雾海来信',
+      englishName: 'LETTERS FROM THE MIST',
+      studio: '拾光工作室',
+      contact: '',
+    },
     hero: {
       eyebrow: '一场写给远方的独立冒险',
       title: '越过雾海，\n寻找世界的回音。',
       subtitle: '带上一封没有署名的信，驶向被遗忘的群岛。在潮汐与星光之间，发现属于你的故事。',
       interval: 5500,
       slides: [
-        { id: 'scene-1', src: '/sample-art/island.svg', alt: '暮色海面上，一座亮着灯的孤岛', caption: '01 / 在潮汐之间' },
-        { id: 'scene-2', src: '/sample-art/forest.svg', alt: '星光落入幽静的森林与山谷', caption: '02 / 听见森林的呼吸' },
-        { id: 'scene-3', src: '/sample-art/journey.svg', alt: '旅人沿着沙丘走向远方的遗迹', caption: '03 / 抵达故事的另一端' },
+        {
+          id: 'scene-1',
+          src: '/sample-art/island.svg',
+          alt: '暮色海面上，一座亮着灯的孤岛',
+          caption: '01 / 在潮汐之间',
+        },
+        {
+          id: 'scene-2',
+          src: '/sample-art/forest.svg',
+          alt: '星光落入幽静的森林与山谷',
+          caption: '02 / 听见森林的呼吸',
+        },
+        {
+          id: 'scene-3',
+          src: '/sample-art/journey.svg',
+          alt: '旅人沿着沙丘走向远方的遗迹',
+          caption: '03 / 抵达故事的另一端',
+        },
       ],
     },
     about: {

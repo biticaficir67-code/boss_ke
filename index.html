@@ -3,21 +3,67 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="独立游戏官网与内容编辑工作台" />
+    <meta name="description" content="游戏官网内容编辑工作台" />
     <meta name="theme-color" content="#102a2e" />
     <title>雾海来信 · 游戏官网</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <style>
-      .boot-screen{min-height:100vh;display:grid;place-content:center;gap:18px;text-align:center;background:#f7f8f5;color:#345344;font:14px/1.8 "Segoe UI","Microsoft YaHei",sans-serif;padding:24px;box-sizing:border-box}.boot-screen h1{font-size:24px;margin:0}.boot-screen p{max-width:460px;margin:0;color:#7c8b7b}.boot-screen button{justify-self:center;padding:10px 22px;border:1px solid #cdd9c8;border-radius:7px;background:white;color:#345344;cursor:pointer}body{margin:0}
+      .boot-screen {
+        min-height: 100vh;
+        display: grid;
+        place-content: center;
+        gap: 18px;
+        text-align: center;
+        background: #f7f8f5;
+        color: #345344;
+        font:
+          14px/1.8 'Segoe UI',
+          'Microsoft YaHei',
+          sans-serif;
+        padding: 24px;
+        box-sizing: border-box;
+      }
+      .boot-screen h1 {
+        font-size: 24px;
+        margin: 0;
+      }
+      .boot-screen p {
+        max-width: 460px;
+        margin: 0;
+        color: #7c8b7b;
+      }
+      .boot-screen button {
+        justify-self: center;
+        padding: 10px 22px;
+        border: 1px solid #cdd9c8;
+        border-radius: 7px;
+        background: white;
+        color: #345344;
+        cursor: pointer;
+      }
+      body {
+        margin: 0;
+      }
     </style>
   </head>
   <body>
-    <div id="app"><div class="boot-screen" role="status"><h1 id="boot-title">正在打开游戏官网…</h1><p id="boot-description">首次启动可能需要几秒，请保留启动窗口。</p><p id="boot-error" hidden style="overflow-wrap:anywhere"></p><button type="button" onclick="window.location.reload()">刷新页面</button></div></div>
-    <noscript><div class="boot-screen"><h1>浏览器需要启用 JavaScript</h1><p>请启用 JavaScript 后刷新页面。</p></div></noscript>
+    <div id="app">
+      <div class="boot-screen" role="status">
+        <h1 id="boot-title">正在打开内容工作台…</h1>
+        <p id="boot-description">正在加载管理页面，请稍候。</p>
+        <p id="boot-error" hidden style="overflow-wrap: anywhere"></p>
+        <button type="button" onclick="window.location.reload()">刷新页面</button>
+      </div>
+    </div>
+    <noscript
+      ><div class="boot-screen">
+        <h1>浏览器需要启用 JavaScript</h1>
+        <p>请启用 JavaScript 后刷新页面。</p>
+      </div></noscript
+    >
     <script>
       (() => {
         let ready = false;
-        let reported = false;
         const show = (title, description) => {
           if (ready) return;
           const heading = document.getElementById('boot-title');
@@ -25,32 +71,37 @@
           if (heading) heading.textContent = title;
           if (detail) detail.textContent = description;
         };
-        const report = (kind, message) => {
-          if (reported || ready || window.__STATIC_GITHUB__) return;
-          reported = true;
-          const cleanMessage = String(message || '').replace(/https?:\/\/[^\s)]+/g, value => {
-            try { const url = new URL(value); return url.origin + url.pathname; } catch { return '[url]'; }
-          }).slice(0, 500);
-          fetch('/api/client-error', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind, page: location.pathname, message: cleanMessage }) }).catch(() => {});
-        };
         const timer = setTimeout(() => {
-          show('页面加载时间较长', window.__STATIC_GITHUB__ ? '请检查网络连接后刷新页面。' : '请确认启动窗口仍在运行。可按 Ctrl+F5 刷新，或关闭旧启动窗口后重新双击 start.bat。');
-          report('timeout', '8 秒后页面仍未完成启动');
+          show('页面加载时间较长', '请检查网络连接后刷新页面。');
         }, 8000);
-        window.__showBootError = error => {
+        window.__showBootError = (error) => {
           clearTimeout(timer);
-          show('页面没有加载成功', window.__STATIC_GITHUB__ ? '请按 Ctrl+F5 刷新，并检查网络连接。' : '请按 Ctrl+F5 刷新。也可以用系统浏览器打开同一地址。本机错误记录：.data/browser-errors.log');
+          show('页面没有加载成功', '请按 Ctrl+F5 刷新，并检查网络连接。');
           const message = String(error?.message || error || '页面入口脚本加载失败').slice(0, 500);
           const detail = document.getElementById('boot-error');
-          if (!ready && detail) { detail.hidden = false; detail.textContent = message; }
-          report('load-error', message);
+          if (!ready && detail) {
+            detail.hidden = false;
+            detail.textContent = message;
+          }
         };
-        window.__finishBoot = () => { ready = true; clearTimeout(timer); };
-        window.addEventListener('error', event => {
-          if (event.target?.tagName === 'SCRIPT') window.__showBootError('无法加载脚本：' + new URL(event.target.src, location.href).pathname);
-          else if (event.message) window.__showBootError(event.error || event.message);
-        }, true);
-        window.addEventListener('unhandledrejection', event => window.__showBootError(event.reason));
+        window.__finishBoot = () => {
+          ready = true;
+          clearTimeout(timer);
+        };
+        window.addEventListener(
+          'error',
+          (event) => {
+            if (event.target?.tagName === 'SCRIPT')
+              window.__showBootError(
+                '无法加载脚本：' + new URL(event.target.src, location.href).pathname,
+              );
+            else if (event.message) window.__showBootError(event.error || event.message);
+          },
+          true,
+        );
+        window.addEventListener('unhandledrejection', (event) =>
+          window.__showBootError(event.reason),
+        );
       })();
     </script>
     <script type="module" src="/src/main.js"></script>

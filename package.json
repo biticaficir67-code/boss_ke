@@ -3,16 +3,20 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Vue 3 独立游戏官网与本地内容管理后台",
-  "engines": { "node": ">=22.12.0" },
+  "description": "Vue 3 独立游戏官网与 GitHub Pages 内容管理工作台",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
-    "dev": "node --env-file-if-exists=.env scripts/dev.mjs",
-    "build": "vite build",
-    "build:pages": "node scripts/build-pages.mjs",
-    "start": "node --env-file-if-exists=.env server/index.mjs",
-    "export": "node --env-file-if-exists=.env scripts/export.mjs",
-    "test": "node --test tests/*.test.mjs",
-    "test:pages": "node --test --test-timeout=30000 tests/api.test.mjs tests/github.test.mjs"
+    "dev": "node scripts/start.mjs",
+    "build": "node scripts/build-pages.mjs",
+    "build:pages": "npm run build",
+    "start": "vite preview --outDir pages-output --host 127.0.0.1 --port 5173 --strictPort",
+    "test": "node --test --test-timeout=30000 tests/*.test.mjs",
+    "test:pages": "npm test",
+    "test:browser": "node tests/browser-github.mjs",
+    "format": "prettier --write src scripts tests index.html vite.config.js package.json .github/workflows/pages.yml",
+    "format:check": "prettier --check src scripts tests index.html vite.config.js package.json .github/workflows/pages.yml"
   },
   "dependencies": {
     "fflate": "^0.8.2",
@@ -21,6 +25,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.0",
+    "prettier": "3.9.10",
     "vite": "^7.0.0"
   }
 }
