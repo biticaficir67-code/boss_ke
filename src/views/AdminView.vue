@@ -10,17 +10,16 @@ import { githubConfig, websiteUrl, imageUrl, previewOptions } from '../lib/hosti
 
 const router = useRouter();
 const tabs = [
-  { id: 'overview', label: '内容概览', icon: 'grid', subtitle: '每一个新故事，都从这里开始。' },
-  { id: 'content', label: '游戏介绍', icon: 'edit', subtitle: '让玩家认识你的游戏与世界。' },
-  { id: 'carousel', label: '首页轮播', icon: 'image', subtitle: '用最动人的画面，留下第一印象。' },
+  { id: 'overview', label: '内容概览', icon: 'grid' },
+  { id: 'content', label: '游戏介绍', icon: 'edit' },
+  { id: 'carousel', label: '首页轮播', icon: 'image' },
   {
     id: 'download',
     label: '下载设置',
     icon: 'download',
-    subtitle: '为玩家准备一个清楚、可靠的下载入口。',
   },
-  { id: 'media', label: '图片素材', icon: 'file', subtitle: '整理画面，为下一次更新做好准备。' },
-  { id: 'settings', label: '账号设置', icon: 'settings', subtitle: '管理你的发布授权。' },
+  { id: 'media', label: '图片素材', icon: 'file' },
+  { id: 'settings', label: '账号设置', icon: 'settings' },
 ];
 const tab = ref('overview');
 const currentTab = computed(() => tabs.find((item) => item.id === tab.value));
@@ -365,14 +364,14 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
   <div class="workspace">
     <aside class="sidebar">
       <RouterLink class="workspace-logo" to="/"
-        ><span class="workspace-logo-icon">✦</span
-        ><span>游戏工作台<small>GAME WEBSITE STUDIO</small></span></RouterLink
+        ><span class="workspace-logo-icon"><Icon name="paw" :size="25" /></span
+        ><span>游戏工作台<small>内容管理</small></span></RouterLink
       >
       <div class="sidebar-site">
         <span class="site-avatar">{{ form?.brand.name?.slice(0, 1) || '游' }}</span>
         <div>
           <strong>{{ form?.brand.name || '我的游戏官网' }}</strong
-          ><span>独立游戏官网</span>
+          ><span>福瑞 · 独立游戏</span>
         </div>
         <span class="sidebar-site-dot"></span>
       </div>
@@ -391,10 +390,6 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
         </button>
       </nav>
       <div class="sidebar-bottom">
-        <div class="sidebar-note">
-          <span>✧</span>
-          <p>让好故事，<br />被更多人看见。</p>
-        </div>
         <button :class="{ active: tab === 'settings' }" @click="tab = 'settings'">
           <Icon name="settings" :size="18" />账号设置
         </button>
@@ -432,9 +427,7 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
       <main class="workspace-content">
         <div class="page-heading">
           <div>
-            <p class="eyebrow">YOUR CREATIVE SPACE</p>
             <h1>{{ currentTab.label }}</h1>
-            <p class="muted">{{ currentTab.subtitle }}</p>
           </div>
           <div v-if="form && !['media', 'settings'].includes(tab)" class="heading-actions">
             <span class="save-status" :class="{ pending: unsaved || meta.dirty }"
@@ -459,9 +452,9 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
           <template v-if="tab === 'overview'">
             <section class="welcome-banner">
               <div>
-                <span class="welcome-tag">为下一次更新，留一点灵感</span>
-                <h2>把新故事，<br />带到玩家面前。</h2>
-                <p>更新一段介绍，换上一张新画面。<br />你的世界，正在等待被发现。</p>
+                <span class="welcome-tag">{{ form.brand.studio }}</span>
+                <h2>{{ form.brand.name }}</h2>
+                <p>{{ form.hero.eyebrow }}</p>
                 <button class="button dark" @click="tab = 'content'">
                   开始编辑<Icon name="arrow" :size="17" />
                 </button>
@@ -472,9 +465,9 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                 <div class="welcome-spark">✧</div>
                 <div class="art-card art-card-back"></div>
                 <div class="art-card art-card-front">
-                  <img :src="imageUrl('/sample-art/island.svg')" alt="" /><span
-                    >LETTERS TO THE WORLD</span
-                  >
+                  <img :src="imageUrl(form.hero.slides[0].src)" alt="" /><span>{{
+                    form.brand.englishName
+                  }}</span>
                 </div>
                 <span class="welcome-star star-one">✦</span
                 ><span class="welcome-star star-two">✦</span>
@@ -506,9 +499,7 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                     !form.download.enabled ? '已隐藏' : form.download.url ? '已配置' : '待配置'
                   }}</strong
                   ><small>{{
-                    form.download.url
-                      ? form.download.version || '未填写版本号'
-                      : '填写外部下载地址即可开放'
+                    form.download.url ? form.download.version || '未填写版本号' : '未设置下载链接'
                   }}</small>
                 </div>
               </div>
@@ -517,30 +508,25 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
               <section class="panel quick-edit">
                 <div class="panel-heading">
                   <div>
-                    <h2>让官网准备就绪</h2>
-                    <p>三个简单步骤，完成你的第一次发布。</p>
+                    <h2>内容编辑</h2>
                   </div>
-                  <span class="tag">快速开始</span>
                 </div>
                 <button class="quick-row" @click="tab = 'content'">
                   <span class="step-number">01</span>
                   <div>
-                    <strong>介绍你的游戏</strong>
-                    <p>修改游戏名称、主标题与故事简介</p>
+                    <strong>游戏介绍</strong>
                   </div>
                   <Icon name="arrow" :size="18" /></button
                 ><button class="quick-row" @click="tab = 'carousel'">
                   <span class="step-number">02</span>
                   <div>
-                    <strong>上传游戏画面</strong>
-                    <p>选择轮播图，调整播放顺序和间隔</p>
+                    <strong>轮播与画廊</strong>
                   </div>
                   <Icon name="arrow" :size="18" /></button
                 ><button class="quick-row" @click="tab = 'download'">
                   <span class="step-number">03</span>
                   <div>
-                    <strong>连接下载入口</strong>
-                    <p>粘贴游戏包链接，填写版本与安装说明</p>
+                    <strong>下载设置</strong>
                   </div>
                   <Icon name="arrow" :size="18" />
                 </button>
@@ -548,8 +534,7 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
               <section class="panel publish-panel">
                 <div class="panel-heading">
                   <div>
-                    <h2>发布与交付</h2>
-                    <p>把完成的内容交给玩家。</p>
+                    <h2>发布管理</h2>
                   </div>
                   <Icon name="upload" :size="19" />
                 </div>
@@ -575,20 +560,6 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                 </button>
               </section>
             </div>
-            <div class="notice">
-              <Icon name="info" :size="17" />
-              <p>
-                保存草稿不会更新正式官网。点击发布后，GitHub
-                会自动部署；本页会确认官网是否已更新。仓库公开，草稿和素材也可被查看，请勿填写密码或私人资料。
-              </p>
-            </div>
-            <div class="notice demo-notice">
-              <Icon name="info" :size="17" />
-              <p>
-                “雾海来信”和配图为本地演示素材。请换成真实游戏内容后再对外发布。静态 ZIP
-                只包含公开网页与图片，不包含账号或管理后台。
-              </p>
-            </div>
           </template>
           <div v-else-if="['content', 'carousel', 'download'].includes(tab)" class="editor-layout">
             <div class="editor-panels" :inert="!!busy || uploadBusy">
@@ -597,7 +568,6 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                   <div class="panel-heading">
                     <div>
                       <h2>游戏基本信息</h2>
-                      <p>用于导航栏、网页标题和页脚。</p>
                     </div>
                     <Icon name="edit" :size="18" />
                   </div>
@@ -625,7 +595,6 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                   <div class="panel-heading">
                     <div>
                       <h2>首页文案</h2>
-                      <p>展现在顶部轮播图上，主标题支持换行。</p>
                     </div>
                   </div>
                   <label>顶部小标题<input v-model="form.hero.eyebrow" maxlength="60" /></label
@@ -647,7 +616,6 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                   <div class="panel-heading">
                     <div>
                       <h2>游戏介绍</h2>
-                      <p>介绍玩法、故事或你想让玩家了解的内容。</p>
                     </div>
                   </div>
                   <label>介绍区小标题<input v-model="form.about.eyebrow" maxlength="40" /></label
@@ -711,12 +679,7 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                       <option :value="15000">15 秒</option>
                     </select></label
                   >
-                  <div class="notice">
-                    <Icon name="info" :size="16" />
-                    <p>
-                      图片会自动压缩到最长边 2400 像素。正式官网支持暂停、手动切换和键盘方向键。
-                    </p>
-                  </div>
+                  <p class="muted">轮播画面同步显示在官网画廊。</p>
                 </section>
                 <section
                   v-for="(slide, index) in form.hero.slides"
@@ -763,7 +726,7 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                       >图片描述<input
                         v-model="slide.alt"
                         maxlength="150"
-                        placeholder="描述画面，帮助无法看到图片的访客" /></label
+                        placeholder="角色或场景名称" /></label
                     ><label
                       >图片角标<input
                         v-model="slide.caption"
@@ -795,7 +758,6 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                   <div class="panel-heading">
                     <div>
                       <h2>下载入口</h2>
-                      <p>官网只提供链接，安装包保留在外部下载平台。</p>
                     </div>
                     <label class="switch-label"
                       ><input
@@ -805,23 +767,13 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                         aria-label="显示下载区域" /><span class="switch"></span
                     ></label>
                   </div>
-                  <p class="field-hint">
-                    {{
-                      form.download.enabled
-                        ? '下载区域已显示。没有填写链接时，按钮会显示“下载即将开放”。'
-                        : '下载区域已隐藏，首页导航与按钮也会同步隐藏。'
-                    }}
-                  </p>
                   <label
                     >下载地址<input
                       v-model="form.download.url"
                       type="url"
                       maxlength="2000"
                       placeholder="https://…"
-                    /><small
-                      >填写 HTTPS
-                      链接。网盘链接会打开分享页，直链由目标平台决定是否直接下载。</small
-                    ></label
+                    /><small>HTTPS 网盘分享链接或下载直链。</small></label
                   >
                   <div class="field-grid">
                     <label
@@ -854,7 +806,6 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                   <div class="panel-heading">
                     <div>
                       <h2>下载区文案</h2>
-                      <p>告诉玩家如何开始这段旅程。</p>
                     </div>
                   </div>
                   <label
@@ -896,7 +847,6 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                   sandbox="allow-scripts allow-same-origin"
                 ></iframe>
               </div>
-              <p>预览跟随输入更新。<br />保存草稿后可打开完整预览，发布后官网生效。</p>
             </aside>
           </div>
           <template v-else-if="tab === 'media'"
@@ -911,7 +861,7 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
             </section>
             <div v-if="!uploads.length" class="panel empty-media">
               <span><Icon name="image" :size="34" /></span>
-              <h2>把你的世界，放进这里。</h2>
+              <h2>暂无上传图片</h2>
               <p>上传第一张游戏画面，再到“首页轮播”中选用。</p>
               <button class="button" :disabled="uploadBusy" @click="startUpload(false)">
                 选择本地图片
@@ -940,7 +890,6 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
             </div>
             <div class="section-subheading">
               <h2>内置演示素材</h2>
-              <p>这些插画仅用于演示，可从轮播素材选择器中使用。</p>
             </div>
             <div class="media-grid">
               <article v-for="image in samples" :key="image.id" class="panel media-card">
@@ -956,13 +905,8 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
             ><section class="panel form-panel">
               <h2>发布授权</h2>
               <p>当前仓库：{{ githubConfig.owner }}/{{ githubConfig.repository }}</p>
-              <p>
-                使用网站负责人的发布密钥授权。密钥只保留在当前标签页会话中；需要更换时退出后重新授权。
-              </p>
-              <p>
-                日常修改内容、上传图片和发布均在这个工作台完成。发布后请等待 GitHub
-                自动部署，状态显示“正式官网已上线”后再分享新版。
-              </p>
+              <p>授权仅在当前标签页有效。更换密钥请退出后重新登录。</p>
+              <p class="muted">公开仓库中的文字和图片均可被访问。</p>
               <a class="button" :href="actionsUrl" target="_blank" rel="noopener noreferrer"
                 >查看部署记录</a
               ><button class="button" @click="logout">退出授权</button>
@@ -970,7 +914,8 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
           >
         </template>
         <footer class="workspace-footer">
-          <span>✦ 为独立创作留一片空间</span><span>游戏官网内容工作台 · Vue 3</span>
+          <span>{{ form?.brand.studio || '游戏工作台' }}</span
+          ><span>{{ statusText }}</span>
         </footer>
       </main>
     </div>

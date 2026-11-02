@@ -82,6 +82,46 @@ try {
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto(base);
   await page.getByRole('heading', { name: /越过雾海/ }).waitFor();
+  await fs.mkdir(path.join(projectRoot, 'test-results'), { recursive: true });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.screenshot({
+    path: path.join(projectRoot, 'test-results/furry-desktop.png'),
+    fullPage: true,
+  });
+  const gallery = page.locator('[data-gallery]');
+  await gallery.first().click();
+  const viewer = page.getByRole('dialog', { name: '画面浏览' });
+  await viewer.waitFor();
+  assert.match(await viewer.locator('[data-lightbox-count]').innerText(), /01 \/ 04/);
+  await page.keyboard.press('ArrowRight');
+  assert.match(await viewer.locator('[data-lightbox-count]').innerText(), /02 \/ 04/);
+  await viewer.getByRole('button', { name: '上一张大图' }).click();
+  assert.match(await viewer.locator('[data-lightbox-count]').innerText(), /01 \/ 04/);
+  await page.keyboard.press('Escape');
+  await viewer.waitFor({ state: 'hidden' });
+  await page.waitForFunction(() => document.body.style.overflow === '');
+  assert.equal(await page.evaluate(() => document.body.style.overflow), '');
+  assert.ok(await gallery.first().evaluate((button) => document.activeElement === button));
+  await page.locator('[data-goto="2"]').click();
+  assert.equal(await page.locator('[data-current]').innerText(), '03');
+  await page.locator('[data-pause]').click();
+  assert.equal(await page.locator('[data-pause]').getAttribute('aria-pressed'), 'true');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator('[data-goto="0"]').click();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  await page.screenshot({
+    path: path.join(projectRoot, 'test-results/furry-mobile.png'),
+    fullPage: true,
+    animations: 'disabled',
+  });
+  await gallery.first().click();
+  await viewer.waitFor();
+  await viewer.getByRole('button', { name: '下一张大图' }).click();
+  assert.match(await viewer.locator('[data-lightbox-count]').innerText(), /02 \/ 04/);
+  await viewer.getByRole('button', { name: '关闭大图' }).click();
+  await viewer.waitFor({ state: 'hidden' });
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.getByRole('link', { name: /内容管理/ }).click();
   await page.waitForLoadState('networkidle');
   await page.getByRole('heading', { name: '授权你的工作台' }).waitFor();
@@ -89,6 +129,10 @@ try {
   await page.getByRole('button', { name: '进入工作台' }).click();
   await page.waitForFunction(() => !document.querySelector('.login-submit')?.disabled);
   await page.getByRole('heading', { name: '内容概览', exact: true }).waitFor();
+  await page.screenshot({
+    path: path.join(projectRoot, 'test-results/furry-admin.png'),
+    fullPage: true,
+  });
   assert.ok(
     await page
       .locator('.welcome-art img')
@@ -160,6 +204,9 @@ try {
         ok: true,
         checks: [
           '仓库子路径与图片',
+          '画廊放大、键盘切换和焦点恢复',
+          '缩略图切换与暂停',
+          '手机布局和大图浏览',
           '网页授权',
           '草稿隔离',
           '自动发布提交',

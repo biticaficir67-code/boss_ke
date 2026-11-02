@@ -2,7 +2,7 @@
 :root {
   font-family: Inter, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   color: #263b37;
-  background: #f7f8fa;
+  background: #f3f1e9;
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
 }
@@ -314,7 +314,7 @@ p {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1.05fr 1fr;
-  background: #fafbf8;
+  background: #f3f1e9;
 }
 .login-art {
   position: relative;
@@ -334,7 +334,7 @@ p {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, #0d293bc4, #17383c66), linear-gradient(0deg, #0a283bc7, transparent);
+    linear-gradient(90deg, #172f2bdb, #17382b66), linear-gradient(0deg, #142e23d9, transparent);
 }
 .login-brand {
   position: relative;
@@ -343,7 +343,7 @@ p {
   align-items: center;
   padding: 45px 54px;
   font-size: 32px;
-  color: #e7ba91;
+  color: #dce8a5;
 }
 .login-brand > span {
   font-size: 20px;
@@ -360,31 +360,16 @@ p {
   position: relative;
   padding: 135px 55px 160px;
 }
-.login-art-copy > span {
-  color: #eac8a3;
-  font-size: 9px;
-  letter-spacing: 3px;
-}
+
 .login-art-copy h1 {
+  font-family: 'STZhongsong', 'Songti SC', 'SimSun', serif;
   margin: 25px 0;
   font-size: 49px;
   font-weight: 500;
   letter-spacing: 4px;
   line-height: 1.5;
 }
-.login-art-copy p {
-  font-size: 13px;
-  line-height: 2.2;
-  color: #e2e5d6bb;
-}
-.login-art-footer {
-  position: absolute;
-  bottom: 36px;
-  left: 56px;
-  font-size: 10px;
-  color: #d1d8c995;
-  letter-spacing: 2px;
-}
+
 .login-form-side {
   position: relative;
   padding: 42px 60px 70px;
@@ -444,28 +429,20 @@ p {
   line-height: 1.9;
   margin: 0;
 }
-.login-bottom {
-  position: absolute;
-  bottom: 24px;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 10px;
-  color: #aab2a4;
-  letter-spacing: 1px;
-}
+
 /* 工作台 */
 .workspace {
   --sidebar-width: 226px;
   min-height: 100vh;
-  background: #f7f8f5;
+  background: #f3f1e9;
 }
 .sidebar {
   width: var(--sidebar-width);
   position: fixed;
   inset: 0 auto 0 0;
-  background: #fff;
-  border-right: 1px solid #e9ece5;
+  background: #1f382e;
+  color: #edf0de;
+  border-right: 1px solid #1f382e;
   display: flex;
   flex-direction: column;
   padding: 28px 18px 15px;
@@ -490,15 +467,15 @@ p {
 }
 .workspace-logo-icon {
   font-size: 31px;
-  color: #bf8d68;
+  color: #dce8a5;
   line-height: 1;
 }
 .sidebar-site {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #f7f8f4;
-  border: 1px solid #ecf0e7;
+  background: #ffffff08;
+  border: 1px solid #ffffff16;
   border-radius: 8px;
   padding: 12px 10px;
   margin: 34px 0 27px;
@@ -509,8 +486,8 @@ p {
   width: 33px;
   height: 33px;
   border-radius: 8px;
-  background: #e2e9dd;
-  color: #718766;
+  background: #dce8a5;
+  color: #2f4729;
   font-size: 16px;
   flex-shrink: 0;
 }
@@ -556,7 +533,7 @@ p {
   border: 0;
   border-radius: 7px;
   background: none;
-  color: #8c988c;
+  color: #bdc8af;
   font-size: 12px;
   width: 100%;
   padding: 12px 14px;
@@ -564,13 +541,17 @@ p {
 }
 .sidebar nav > button.active,
 .sidebar-bottom > button.active {
-  background: #edf3e8;
-  color: #5c7e4f;
+  background: #dce8a5;
+  color: #29432b;
   font-weight: 600;
 }
 .sidebar nav > button:hover,
 .sidebar-bottom > button:hover {
-  background: #f3f6ef;
+  background: #ffffff14;
+}
+.sidebar nav > button.active:hover,
+.sidebar-bottom > button.active:hover {
+  background: #e5edbb;
 }
 .nav-count {
   margin-left: auto;
@@ -583,34 +564,12 @@ p {
 .sidebar-bottom {
   margin-top: auto;
 }
-.sidebar-note {
-  position: relative;
-  overflow: hidden;
-  background: #f7f5ee;
-  border: 1px solid #eeeade;
-  border-radius: 9px;
-  padding: 15px 17px;
-  margin: 25px 4px 18px;
-}
-.sidebar-note > span {
-  position: absolute;
-  right: 18px;
-  top: 8px;
-  font-size: 40px;
-  color: #d8cbb3;
-}
-.sidebar-note p {
-  font-size: 11px;
-  line-height: 1.9;
-  margin: 0;
-  color: #a7987f;
-  letter-spacing: 1px;
-}
+
 .sidebar-user {
   display: flex;
   align-items: center;
   gap: 9px;
-  border-top: 1px solid #edf0e8;
+  border-top: 1px solid #ffffff1f;
   padding: 18px 9px 3px;
   margin-top: 15px;
 }
@@ -723,17 +682,18 @@ p {
   min-height: 293px;
   padding: 35px 40px;
   border-radius: 11px;
-  background: #f1e9dd;
+  background: #e5e9d7;
   position: relative;
   overflow: hidden;
 }
 .welcome-tag {
   font-size: 9px;
-  color: #ae9275;
+  color: #798764;
   letter-spacing: 1.5px;
 }
 .welcome-banner h2 {
-  font-size: 29px;
+  font-family: 'STZhongsong', 'Songti SC', 'SimSun', serif;
+  font-size: 38px;
   line-height: 1.5;
   font-weight: 550;
   letter-spacing: 2px;
@@ -742,7 +702,7 @@ p {
 .welcome-banner p {
   font-size: 11px;
   line-height: 1.9;
-  color: #a59580;
+  color: #768268;
   margin-bottom: 18px;
 }
 .welcome-banner .button {
@@ -1000,12 +960,7 @@ p {
 .utility-row:hover {
   color: #456854;
 }
-.demo-notice {
-  margin-top: 22px;
-  background: #eeefe7;
-  font-size: 10px;
-  padding: 13px 16px;
-}
+
 .workspace-footer {
   display: flex;
   align-items: center;
@@ -1128,13 +1083,7 @@ p {
   border-radius: 4px 4px 10px 10px;
   background: #f8f5ef;
 }
-.preview-panel > p {
-  font-size: 9px;
-  line-height: 1.9;
-  text-align: center;
-  color: #a7b09e;
-  margin: 13px 0 0;
-}
+
 .slide-editor {
   margin-bottom: 18px;
   padding: 18px;
@@ -1205,12 +1154,7 @@ p {
   justify-content: space-between;
   gap: 10px;
 }
-.field-hint {
-  font-size: 11px;
-  color: #99a48f;
-  margin-bottom: 25px;
-  line-height: 1.9;
-}
+
 .switch-label {
   display: flex;
   align-items: center;
@@ -1844,10 +1788,6 @@ p {
   .back-link {
     left: 28px;
     top: 28px;
-  }
-  .login-bottom {
-    font-size: 9px;
-    bottom: 17px;
   }
 }
 @media (max-width: 390px) {
