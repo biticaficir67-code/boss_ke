@@ -1,7 +1,7 @@
 {
-  "id": "1793628832469-ba4136f1",
-  "createdAt": "2026-11-02T14:13:52.471Z",
-  "revision": 4,
+  "id": "1793634035794-59693da8",
+  "createdAt": "2026-11-02T15:40:35.794Z",
+  "revision": 5,
   "content": {
     "schemaVersion": 1,
     "extra": {
@@ -94,7 +94,7 @@
     "brand": {
       "name": "未知的邮件",
       "englishName": "UNKNOWN MAIL",
-      "studio": "拾光工作室",
+      "studio": "柯首领",
       "contact": ""
     },
     "hero": {
