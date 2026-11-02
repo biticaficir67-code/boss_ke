@@ -10,7 +10,14 @@ import { decodeText } from '../src/github/repository.js';
 import { publishedPath } from '../src/github/state.js';
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
-const fixture = githubFixture();
+const fixture = githubFixture(
+  await Promise.all(
+    ['island.svg', 'forest.svg', 'journey.svg', 'post-office.webp'].map(async (name) => [
+      `public/sample-art/${name}`,
+      (await fs.readFile(path.join(projectRoot, 'public/sample-art', name))).toString('base64'),
+    ]),
+  ),
+);
 const output = path.join(projectRoot, 'pages-output');
 const mime = {
   '.html': 'text/html; charset=utf-8',
@@ -93,7 +100,7 @@ try {
   });
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto(base);
-  await page.getByRole('heading', { name: /越过雾海/ }).waitFor();
+  await page.getByRole('heading', { name: /这封邮件/ }).waitFor();
   assert.equal(
     await page.locator('.gs-slides').evaluate((node) => getComputedStyle(node).position),
     'absolute',
@@ -106,15 +113,47 @@ try {
     path: path.join(projectRoot, 'test-results/furry-desktop.png'),
     fullPage: true,
   });
+  await page.locator('.gs-letter > summary').click();
+  assert.ok(await page.locator('.gs-letter').evaluate((node) => node.open));
+  await page.locator('.gs-letter > summary').click();
+  await page.getByRole('tab', { name: /夜班投递员/ }).click();
+  assert.equal(
+    await page.getByRole('tab', { name: /夜班投递员/ }).getAttribute('aria-selected'),
+    'true',
+  );
+  await page.keyboard.press('Home');
+  assert.equal(
+    await page.getByRole('tab', { name: /收件人/ }).getAttribute('aria-selected'),
+    'true',
+  );
+  await page.locator('.gs-update > summary').first().click();
+  assert.ok(
+    await page
+      .locator('.gs-update')
+      .first()
+      .evaluate((node) => node.open),
+  );
+  await page.locator('.gs-faq summary').first().click();
+  assert.ok(
+    await page
+      .locator('.gs-faq details')
+      .first()
+      .evaluate((node) => node.open),
+  );
+  await page.locator('.gs-system summary').click();
+  assert.ok(await page.locator('.gs-system').evaluate((node) => node.open));
+  await page.locator('[data-effects-toggle]').click();
+  assert.equal(await page.evaluate(() => localStorage.getItem('unknown-mail-effects')), 'off');
   const gallery = page.locator('[data-gallery]');
+  const galleryCount = String(await gallery.count()).padStart(2, '0');
   await gallery.first().click();
   const viewer = page.getByRole('dialog', { name: '画面浏览' });
   await viewer.waitFor();
-  assert.match(await viewer.locator('[data-lightbox-count]').innerText(), /01 \/ 04/);
+  assert.equal(await viewer.locator('[data-lightbox-count]').innerText(), `01 / ${galleryCount}`);
   await page.keyboard.press('ArrowRight');
-  assert.match(await viewer.locator('[data-lightbox-count]').innerText(), /02 \/ 04/);
+  assert.equal(await viewer.locator('[data-lightbox-count]').innerText(), `02 / ${galleryCount}`);
   await viewer.getByRole('button', { name: '上一张大图' }).click();
-  assert.match(await viewer.locator('[data-lightbox-count]').innerText(), /01 \/ 04/);
+  assert.equal(await viewer.locator('[data-lightbox-count]').innerText(), `01 / ${galleryCount}`);
   await page.keyboard.press('Escape');
   await viewer.waitFor({ state: 'hidden' });
   await page.waitForFunction(() => document.body.style.overflow === '');
@@ -125,6 +164,10 @@ try {
   await page.locator('[data-pause]').click();
   assert.equal(await page.locator('[data-pause]').getAttribute('aria-pressed'), 'true');
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator('[data-menu]').click();
+  assert.equal(await page.locator('[data-menu]').getAttribute('aria-expanded'), 'true');
+  await page.locator('#site-navigation').getByRole('link', { name: '角色', exact: true }).click();
+  assert.equal(await page.locator('[data-menu]').getAttribute('aria-expanded'), 'false');
   await page.locator('[data-goto="0"]').click();
   await page.evaluate(() => window.scrollTo(0, 0));
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
@@ -136,7 +179,7 @@ try {
   await gallery.first().click();
   await viewer.waitFor();
   await viewer.getByRole('button', { name: '下一张大图' }).click();
-  assert.match(await viewer.locator('[data-lightbox-count]').innerText(), /02 \/ 04/);
+  assert.equal(await viewer.locator('[data-lightbox-count]').innerText(), `02 / ${galleryCount}`);
   await viewer.getByRole('button', { name: '关闭大图' }).click();
   await viewer.waitFor({ state: 'hidden' });
   await page.setViewportSize({ width: 1440, height: 1000 });
@@ -156,6 +199,24 @@ try {
       .locator('.welcome-art img')
       .evaluate((image) => image.complete && image.naturalWidth > 0),
   );
+  await page.getByRole('button', { name: '剧情与角色', exact: true }).click();
+  await page.getByLabel('来信标题', { exact: true }).fill('请确认你的测试邮件');
+  await page.getByLabel('角色名称', { exact: true }).first().fill('测试收件人');
+  await page
+    .getByLabel('角色图片', { exact: true })
+    .nth(1)
+    .selectOption('/sample-art/post-office.webp');
+  await page.getByRole('button', { name: '添加玩法介绍', exact: true }).click();
+  await page.getByLabel('玩法标题', { exact: true }).last().fill('记忆回溯');
+  await page.getByLabel('玩法介绍', { exact: true }).last().fill('新增玩法说明测试');
+  await page.getByRole('button', { name: '动态与问答', exact: true }).click();
+  await page.getByRole('button', { name: '添加官网动态', exact: true }).click();
+  await page.getByLabel('动态日期', { exact: true }).last().fill('2026-11-02');
+  await page.getByLabel('动态标题', { exact: true }).last().fill('新版本动态测试');
+  await page.getByLabel('动态正文', { exact: true }).last().fill('更新内容测试');
+  await page.getByRole('button', { name: '添加常见问题', exact: true }).click();
+  await page.getByLabel('问题', { exact: true }).last().fill('测试提问');
+  await page.getByLabel('回答', { exact: true }).last().fill('测试回答');
   await page.getByRole('button', { name: '游戏介绍', exact: true }).click();
   await page.getByLabel('游戏名称', { exact: true }).fill('GitHub 在线编辑测试');
   await page.getByLabel('首页主标题', { exact: true }).fill('网页修改，自动发布');
@@ -163,10 +224,12 @@ try {
   await page.getByText('草稿已保存，正式官网尚未改变', { exact: true }).waitFor();
   assert.equal(
     JSON.parse(decodeText(fixture.files().get(publishedPath))).content.brand.name,
-    '雾海来信',
+    '未知的邮件',
   );
   const preview = page.frameLocator('.preview-panel iframe');
   await preview.getByRole('heading', { name: '网页修改，自动发布' }).waitFor();
+  await preview.getByRole('heading', { name: '记忆回溯', exact: true }).waitFor();
+  await preview.getByRole('tab', { name: /测试收件人/ }).waitFor();
   assert.equal(
     await preview.locator('.gs-slides').evaluate((node) => getComputedStyle(node).position),
     'absolute',
@@ -181,8 +244,20 @@ try {
   deployed = JSON.parse(decodeText(fixture.files().get(publishedPath)));
   assert.equal(deployed.content.brand.name, 'GitHub 在线编辑测试');
   assert.equal(deployed.content.download.url, 'https://example.com/game.zip');
+  assert.equal(deployed.content.extra.characters[0].name, '测试收件人');
+  assert.equal(deployed.content.extra.updates.at(-1).title, '新版本动态测试');
+  assert.equal(deployed.content.extra.faq.at(-1).answer, '测试回答');
   await page.getByRole('button', { name: '内容概览', exact: true }).click();
   await page.getByText('正式官网已上线', { exact: true }).waitFor({ timeout: 20000 });
+  const [zip] = await Promise.all([
+    page.waitForEvent('download', { timeout: 30000 }),
+    page.getByRole('button', { name: /导出静态网站 ZIP/ }).click(),
+  ]);
+  const { unzipSync } = require('fflate');
+  const files = unzipSync(await fs.readFile(await zip.path()));
+  assert.ok(files['assets/post-office.webp'], '只用于角色的图片也必须进入 ZIP');
+  assert.ok(new TextDecoder().decode(files['site.css']).includes('.gs-slides'));
+  assert.ok(new TextDecoder().decode(files['index.html']).includes('新版本动态测试'));
   await page.getByRole('button', { name: '图片素材', exact: true }).click();
   const png = await page.evaluate(() => {
     const canvas = document.createElement('canvas');
@@ -232,6 +307,10 @@ try {
           '缩略图切换与暂停',
           '手机布局和大图浏览',
           '网页授权',
+          '剧情来信、角色切换、动态、问答和氛围开关',
+          '手机导航展开和关闭',
+          '新栏目编辑保存发布',
+          '导出包含角色专用图片',
           '草稿隔离',
           '自动发布提交',
           '确认部署已上线',

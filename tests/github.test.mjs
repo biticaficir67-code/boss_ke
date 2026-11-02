@@ -27,7 +27,7 @@ test('GitHub 草稿与正式发布隔离，并发提交不能覆盖其他修改'
   assert.equal((await repo.read()).state.content.brand.name, '测试新游戏');
   assert.equal(
     JSON.parse(decodeText(fixture.files().get(publishedPath))).content.brand.name,
-    '雾海来信',
+    '未知的邮件',
   );
   await assert.rejects(repo.commit(concurrent, concurrent.state), (error) => error.status === 422);
   assert.equal((await repo.read()).state.content.brand.name, '测试新游戏');
@@ -85,4 +85,23 @@ test('GitHub 素材与内容原子提交、路径校验和历史恢复', async (
   assert.equal(restored.content.hero.slides[0].src, '/sample-art/island.svg');
   assert.equal(restored.published.content.hero.slides[0].src, record.src);
   assert.throws(() => imageRepositoryPath('/../../.env'), /不支持/);
+});
+
+test('仅被角色档案引用的图片也受到删除保护，未上传图片不能发布', () => {
+  const fixture = githubFixture();
+  const content = JSON.parse(decodeText(fixture.files().get(statePath)));
+  const record = {
+    id: '12345678-1234-1234-1234-123456789abc',
+    src: '/uploads/12345678-1234-1234-1234-123456789abc.png',
+    name: '角色.png',
+  };
+  const proposed = structuredClone(content.content);
+  proposed.extra.characters[0].image = record.src;
+  assert.throws(
+    () => changeState(content, 'save', { content: proposed, expectedRevision: 1 }),
+    /素材库/,
+  );
+  const uploaded = changeState(content, 'upload', { record });
+  const saved = changeState(uploaded, 'save', { content: proposed, expectedRevision: 1 });
+  assert.throws(() => changeState(saved, 'remove', { id: record.id }), /使用/);
 });

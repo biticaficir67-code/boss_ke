@@ -1,7 +1,7 @@
 import { encodeText } from '../../src/github/repository.js';
 import { initialState, statePath, publishedPath } from '../../src/github/state.js';
 
-export function githubFixture() {
+export function githubFixture(seedFiles = []) {
   let number = 0;
   let head = 'commit-initial';
   const state = initialState();
@@ -9,6 +9,7 @@ export function githubFixture() {
   const initial = new Map([
     [statePath, encodeText(JSON.stringify(state))],
     [publishedPath, encodeText(JSON.stringify(state.published))],
+    ...seedFiles,
   ]);
   const trees = new Map([['tree-initial', initial]]);
   const commits = new Map([[head, { tree: 'tree-initial', parents: [] }]]);

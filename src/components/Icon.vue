@@ -1,6 +1,7 @@
 <script setup>
 defineProps({ name: String, size: { type: [Number, String], default: 20 } });
 const paths = {
+  mail: 'M3 6h18v14H3Z M3 6l9 8 9-8 M3 20l6-8m12 8-6-8 M8 6 7 2l5 2 5-2-1 4',
   paw: 'M8 18c0-3 3-6 5-6s5 3 5 6c0 4-3 2-5 2s-5 2-5-2Z M5 8a2 3 0 1 0 0 6 2 3 0 0 0 0-6Z M10 3a2 3 0 1 0 0 6 2 3 0 0 0 0-6Z M16 4a2 3 0 1 0 0 6 2 3 0 0 0 0-6Z M21 9a2 3 0 1 0 0 6 2 3 0 0 0 0-6Z',
   grid: 'M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z',
   edit: 'm16 3 5 5-12 12-6 1 1-6L16 3Z M13 6l5 5',

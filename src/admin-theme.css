@@ -1,0 +1,259 @@
+/* 后台保留原有表单布局，与“未知的邮件”的夜间档案风格保持一致。 */
+:root {
+  color-scheme: dark;
+  background: #101719;
+  color: #d1d7cc;
+}
+.workspace,
+.login-page,
+.login-form-side,
+.full-preview {
+  background: #101719;
+}
+.sidebar {
+  background: #0b1214;
+  border-color: #3a4b4055;
+}
+.workspace-topbar,
+.mobile-nav,
+.full-preview > header {
+  background: #141f20;
+  border-color: #647a5d33;
+}
+.sidebar-site {
+  background: #ffffff04;
+  border-color: #61726044;
+}
+.workspace-logo-icon,
+.login-brand {
+  color: #c7aa7b;
+}
+.site-avatar,
+.sidebar nav > button.active,
+.sidebar-bottom > button.active,
+.mobile-nav button.active {
+  background: #bfa175;
+  color: #15201a;
+}
+.sidebar nav > button.active:hover,
+.sidebar-bottom > button.active:hover {
+  background: #d0b489;
+}
+.sidebar nav > button,
+.sidebar-bottom > button {
+  color: #a0b4a1;
+}
+.sidebar-user,
+.workspace-footer {
+  border-color: #64785a36;
+}
+.sidebar-user > span {
+  background: #29392d;
+  color: #b7c1a2;
+}
+.workspace-content h1,
+.panel h2,
+.modal h2,
+.quick-row strong,
+.stat-card strong,
+.workspace-logo,
+.login-form-wrap h2 {
+  color: #d4d7c9;
+}
+.panel,
+.stat-card,
+.modal {
+  background: #172223;
+  border-color: #81916f2b;
+  box-shadow: none;
+}
+.panel-heading p,
+.muted,
+.media-toolbar p,
+.center-state p {
+  color: #93a58f;
+}
+.welcome-banner {
+  background: #1c2b28;
+  border: 1px solid #8c99783b;
+}
+.welcome-banner h2 {
+  color: #ded7c2;
+}
+.welcome-banner p,
+.welcome-tag {
+  color: #a5af95;
+}
+.welcome-orbit {
+  border-color: #9b957838;
+}
+.art-card-front {
+  background: #c8c1a9;
+}
+.art-card-front > img {
+  filter: saturate(0.5) brightness(0.75);
+}
+.stat-icon.green,
+.stat-icon.peach,
+.stat-icon.lilac {
+  color: #b9ab86;
+  background: #2d3930;
+}
+.stat-card > div > span,
+.quick-row p,
+.publication-date small {
+  color: #8b9e8b;
+}
+.stat-card em,
+.quick-row > svg,
+.utility-row > svg {
+  color: #a3ae93;
+}
+.button {
+  background: #1c2a28;
+  color: #bdc6ae;
+  border-color: #74876855;
+  border-radius: 3px;
+}
+.button:hover:not(:disabled) {
+  background: #2d3e33;
+  border-color: #b3a17a;
+}
+.button.primary,
+.button.dark {
+  background: #baa073;
+  border-color: #baa073;
+  color: #142019;
+}
+.button.primary:hover:not(:disabled),
+.button.dark:hover:not(:disabled) {
+  background: #d1b489;
+}
+.button.ghost {
+  background: none;
+  border-color: transparent;
+}
+.button.destructive {
+  background: #854f47;
+  color: #f1e0c8;
+  border-color: #854f47;
+}
+input,
+textarea,
+select {
+  background: #101c1d;
+  color: #d4d6c7;
+  border-color: #6b7d6259;
+  border-radius: 3px;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #b49c74;
+  box-shadow: 0 0 0 3px #b49c7414;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #748873;
+}
+label {
+  color: #b1bea9;
+}
+label small {
+  color: #889d86;
+}
+.tag,
+.nav-count {
+  background: #2c3b2e;
+  color: #a9b58c;
+}
+.icon-button {
+  color: #9eaf92;
+}
+.icon-button:hover:not(:disabled) {
+  background: #394732;
+  color: #d0c6a4;
+}
+.step-number,
+.login-symbol,
+.empty-media > span {
+  background: #26352b;
+  color: #b4aa88;
+  border-color: #89916c44;
+}
+.quick-row,
+.utility-row,
+.modal > header,
+.modal > footer,
+.history-list article,
+.extended-item {
+  border-color: #7b8a6833 !important;
+}
+.quick-row:hover,
+.utility-row:hover {
+  background: #aab4770a;
+}
+.notice {
+  background: #233326;
+  color: #a4b493;
+}
+.form-error {
+  background: #582e2a;
+  color: #e6c2a4;
+}
+.preview-device,
+.preview-device-bar {
+  background: #25352c;
+  border-color: #65745655;
+}
+.slide-image,
+.media-card > img {
+  background: #14201d;
+}
+.slide-image > img {
+  filter: saturate(0.6);
+}
+.picker-grid > button {
+  background: #172822;
+  border-color: #6f815e44;
+  color: #bac6ac;
+}
+.login-art-shade {
+  background:
+    linear-gradient(0deg, #0b171cd9, #0c171c33), linear-gradient(90deg, #0f191c7d, transparent);
+}
+.login-hint,
+.back-link,
+.breadcrumb,
+.breadcrumb strong,
+.github-help,
+.github-help a {
+  color: #9daa91 !important;
+}
+.mobile-nav button {
+  color: #a8b198;
+}
+.save-status,
+.status-badge,
+.stat-card small {
+  color: #a1b48e;
+}
+.save-status.pending {
+  color: #c6aa78;
+}
+.modal-backdrop {
+  background: #050c0ddc;
+}
+.source-modal pre {
+  background: #0c1717;
+}
+.form-panel {
+  border-radius: 4px;
+}
+@media (max-width: 760px) {
+  .mobile-nav {
+    position: sticky;
+    top: 0;
+    z-index: 25;
+  }
+}

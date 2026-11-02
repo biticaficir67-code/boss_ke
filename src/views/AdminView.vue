@@ -2,6 +2,9 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import Icon from '../components/Icon.vue';
+import ExtendedEditor from '../components/ExtendedEditor.vue';
+import { validateContent } from '../content/validation.js';
+import { contentImages } from '../content/sections.js';
 import { request } from '../lib/api.js';
 import { auth, acceptAuth } from '../lib/auth.js';
 import { notify } from '../lib/notify.js';
@@ -13,6 +16,8 @@ const tabs = [
   { id: 'overview', label: '内容概览', icon: 'grid' },
   { id: 'content', label: '游戏介绍', icon: 'edit' },
   { id: 'carousel', label: '首页轮播', icon: 'image' },
+  { id: 'world', label: '剧情与角色', icon: 'file' },
+  { id: 'updates', label: '动态与问答', icon: 'history' },
   {
     id: 'download',
     label: '下载设置',
@@ -57,8 +62,14 @@ async function checkDeployment() {
   const deployed = await request('/api/admin/deployment').catch(() => ({}));
   online.value = deployed.releaseId === meta.value.releaseId;
 }
-const selectedImages = computed(() => form.value?.hero.slides.map((slide) => slide.src) || []);
+const selectedImages = computed(() => (form.value ? contentImages(form.value) : []));
 const samples = [
+  {
+    id: 'concept-post-office',
+    name: '概念 · 夜雾邮局',
+    src: '/sample-art/post-office.webp',
+    sample: true,
+  },
   { id: 'sample-island', name: '演示 · 潮汐孤岛', src: '/sample-art/island.svg', sample: true },
   { id: 'sample-forest', name: '演示 · 林间星光', src: '/sample-art/forest.svg', sample: true },
   { id: 'sample-journey', name: '演示 · 远行沙丘', src: '/sample-art/journey.svg', sample: true },
@@ -80,7 +91,7 @@ function date(value) {
 }
 function acceptDraft(data) {
   meta.value = data;
-  form.value = structuredClone(data.content);
+  form.value = validateContent(data.content);
   saved.value = JSON.stringify(form.value);
 }
 async function load() {
@@ -364,7 +375,7 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
   <div class="workspace">
     <aside class="sidebar">
       <RouterLink class="workspace-logo" to="/"
-        ><span class="workspace-logo-icon"><Icon name="paw" :size="25" /></span
+        ><span class="workspace-logo-icon"><Icon name="mail" :size="25" /></span
         ><span>游戏工作台<small>内容管理</small></span></RouterLink
       >
       <div class="sidebar-site">
@@ -378,7 +389,7 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
       <p class="sidebar-label">内容管理</p>
       <nav aria-label="后台导航">
         <button
-          v-for="item in tabs.slice(0, 5)"
+          v-for="item in tabs.filter((item) => item.id !== 'settings')"
           :key="item.id"
           :class="{ active: tab === item.id }"
           @click="tab = item.id"
@@ -561,8 +572,17 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
               </section>
             </div>
           </template>
-          <div v-else-if="['content', 'carousel', 'download'].includes(tab)" class="editor-layout">
+          <div
+            v-else-if="['content', 'carousel', 'download', 'world', 'updates'].includes(tab)"
+            class="editor-layout"
+          >
             <div class="editor-panels" :inert="!!busy || uploadBusy">
+              <ExtendedEditor
+                v-if="['world', 'updates'].includes(tab)"
+                v-model="form"
+                :mode="tab"
+                :images="allImages"
+              />
               <template v-if="tab === 'content'"
                 ><section class="panel form-panel">
                   <div class="panel-heading">
@@ -823,6 +843,12 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
                     ></textarea>
                   </label></section
               ></template>
+              <ExtendedEditor
+                v-if="tab === 'download'"
+                v-model="form"
+                mode="download"
+                :images="allImages"
+              />
               <div class="editor-bottom-actions">
                 <button class="button small ghost" @click="showSource = true">
                   <Icon name="code" :size="16" />查看 HTML</button

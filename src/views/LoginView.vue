@@ -26,13 +26,13 @@ async function submit() {
 <template>
   <main class="login-page">
     <section class="login-art">
-      <img :src="imageUrl('/sample-art/forest.svg')" alt="星光下的森林" />
+      <img :src="imageUrl('/sample-art/post-office.webp')" alt="夜雾里的旧邮局" />
       <div class="login-art-shade"></div>
       <a class="login-brand" :href="websiteUrl"
-        ><Icon name="paw" :size="30" /> <span>游戏工作台 <small>雾海手记</small></span></a
+        ><Icon name="mail" :size="30" /> <span>游戏工作台 <small>未知档案</small></span></a
       >
       <div class="login-art-copy">
-        <h1>收藏相遇，<br />续写旅程。</h1>
+        <h1>未署名的来信，<br />等你归档。</h1>
       </div>
     </section>
     <section class="login-form-side">

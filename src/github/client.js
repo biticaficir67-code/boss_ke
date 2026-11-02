@@ -1,8 +1,9 @@
 import { GitHubRepository } from './repository.js';
 import { asDraft, changeState, publishedPath, imageRepositoryPath } from './state.js';
-import { githubConfig, rememberImage, websiteUrl } from '../lib/hosting.js';
+import { githubConfig, rememberImage, websiteUrl, siteAssetVersion } from '../lib/hosting.js';
 import { renderDocument } from '../site/render.js';
 import { zipSync, strToU8 } from 'fflate';
+import { contentImages } from '../content/sections.js';
 
 const storageKey = `boss-ke-github:${githubConfig.owner}/${githubConfig.repository}`;
 let token = '';
@@ -171,15 +172,16 @@ async function handle(url, { method = 'GET', body = {} } = {}) {
     const files = { 'index.html': strToU8(renderDocument(content)) };
     await Promise.all(
       ['site.css', 'site.js', 'favicon.svg'].map(async (name) => {
-        const response = await fetch(new URL(`../${name}`, document.baseURI));
+        const version = siteAssetVersion ? `?v=${encodeURIComponent(siteAssetVersion)}` : '';
+        const response = await fetch(new URL(`../${name}${version}`, document.baseURI));
         if (!response.ok) throw new Error('静态资源暂时无法导出');
         files[name] = new Uint8Array(await response.arrayBuffer());
       }),
     );
     await Promise.all(
-      content.hero.slides.map(async (slide) => {
-        files[`assets/${slide.src.split('/').pop()}`] = await repository.bytes(
-          imageRepositoryPath(slide.src),
+      contentImages(content).map(async (src) => {
+        files[`assets/${src.split('/').pop()}`] = await repository.bytes(
+          imageRepositoryPath(src),
           snapshot.sha,
         );
       }),

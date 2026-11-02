@@ -9,6 +9,105 @@ export function mountSite(root) {
   const dots = [...root.querySelectorAll('[data-goto]')];
   const pauseButton = root.querySelector('[data-pause]');
   const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // 氛围开关仅控制轻微雾层运动，不播放声音、不制造闪屏。
+  const effectsButton = root.querySelector('[data-effects-toggle]');
+  let effects = !media.matches;
+  try {
+    effects = !media.matches && localStorage.getItem('unknown-mail-effects') !== 'off';
+  } catch {
+    /* 禁用存储仍可使用。 */
+  }
+  const setEffects = (enabled, remember = false) => {
+    effects = enabled;
+    root.dataset.effects = enabled ? 'on' : 'off';
+    effectsButton?.setAttribute('aria-pressed', String(enabled));
+    if (effectsButton) effectsButton.querySelector('span').textContent = enabled ? '开' : '关';
+    if (remember)
+      try {
+        localStorage.setItem('unknown-mail-effects', enabled ? 'on' : 'off');
+      } catch {
+        /* 使用内存状态。 */
+      }
+  };
+  setEffects(effects);
+  on(effectsButton, 'click', () => setEffects(!effects, true));
+
+  const menu = root.querySelector('[data-menu]');
+  const navigation = root.querySelector('#site-navigation');
+  const setMenu = (open) => {
+    root.classList.toggle('is-menu-open', open);
+    menu?.setAttribute('aria-expanded', String(open));
+  };
+  on(menu, 'click', () => setMenu(menu.getAttribute('aria-expanded') !== 'true'));
+  on(navigation, 'click', (event) => {
+    if (event.target.closest('a')) setMenu(false);
+  });
+  on(document, 'keydown', (event) => {
+    if (event.key === 'Escape' && root.classList.contains('is-menu-open')) {
+      setMenu(false);
+      menu.focus();
+    }
+  });
+  on(document, 'click', (event) => {
+    if (
+      root.classList.contains('is-menu-open') &&
+      !root.querySelector('.gs-header').contains(event.target)
+    )
+      setMenu(false);
+  });
+  const tabs = [...root.querySelectorAll('[data-character]')];
+  const panels = [...root.querySelectorAll('[data-character-panel]')];
+  const selectCharacter = (index) => {
+    tabs.forEach((tab, i) => {
+      tab.classList.toggle('is-active', i === index);
+      tab.setAttribute('aria-selected', String(i === index));
+      tab.tabIndex = i === index ? 0 : -1;
+      panels[i].hidden = i !== index;
+    });
+  };
+  tabs.forEach((tab, index) => {
+    on(tab, 'click', () => selectCharacter(index));
+    on(tab, 'keydown', (event) => {
+      const destination =
+        event.key === 'Home'
+          ? 0
+          : event.key === 'End'
+            ? tabs.length - 1
+            : event.key === 'ArrowRight'
+              ? (index + 1) % tabs.length
+              : event.key === 'ArrowLeft'
+                ? (index - 1 + tabs.length) % tabs.length
+                : -1;
+      if (destination < 0) return;
+      event.preventDefault();
+      selectCharacter(destination);
+      tabs[destination].focus();
+    });
+  });
+  const navLinks = [...root.querySelectorAll('[data-nav]')];
+  const sections = navLinks.map((link) => root.querySelector(`#${link.dataset.nav}`));
+  let scrollFrame;
+  const updatePosition = () => {
+    scrollFrame = null;
+    let active = -1;
+    sections.forEach((section, i) => {
+      if (section?.getBoundingClientRect().top <= 165) active = i;
+    });
+    navLinks.forEach((link, i) => {
+      if (i === active) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+    const progress = root.querySelector('[data-progress]');
+    const distance = document.documentElement.scrollHeight - window.innerHeight;
+    if (progress)
+      progress.style.width = `${distance > 0 ? Math.max(0, Math.min(100, (window.scrollY / distance) * 100)) : 0}%`;
+  };
+  const schedulePosition = () => {
+    if (!scrollFrame) scrollFrame = requestAnimationFrame(updatePosition);
+  };
+  on(window, 'scroll', schedulePosition);
+  on(window, 'resize', schedulePosition);
+  updatePosition();
   let current = 0;
   let paused = media.matches;
   let hovering = false;
@@ -71,6 +170,7 @@ export function mountSite(root) {
   });
   on(document, 'visibilitychange', start);
   on(media, 'change', () => {
+    if (media.matches) setEffects(false);
     paused = media.matches;
     updatePause();
     start();
@@ -170,6 +270,7 @@ export function mountSite(root) {
   updatePause();
   start();
   return () => {
+    cancelAnimationFrame(scrollFrame);
     if (viewing) {
       lightbox.close();
       document.body.style.overflow = previousOverflow || '';

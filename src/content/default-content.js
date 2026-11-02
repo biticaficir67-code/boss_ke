@@ -1,16 +1,19 @@
+import { defaultSections } from './sections.js';
+
 export function defaultContent() {
   return {
     schemaVersion: 1,
+    extra: defaultSections(),
     brand: {
-      name: '雾海来信',
-      englishName: 'LETTERS FROM THE MIST',
+      name: '未知的邮件',
+      englishName: 'UNKNOWN MAIL',
       studio: '拾光工作室',
       contact: '',
     },
     hero: {
-      eyebrow: '福瑞 · 独立叙事冒险',
-      title: '越过雾海，\n与你温柔相遇。',
-      subtitle: '一封来信，一次相遇。和毛茸茸的旅伴一起，走进雾海彼端的故事。',
+      eyebrow: '福瑞 · 微恐 · 悬疑叙事',
+      title: '这封邮件，\n不该由你收到。',
+      subtitle: '寄件人不存在，收件地址却是你的家。夜雾里，那座早已停业的邮局，又亮起了灯。',
       interval: 5500,
       slides: [
         {
@@ -35,14 +38,14 @@ export function defaultContent() {
     },
     about: {
       eyebrow: '关于这段旅程',
-      title: '故事的另一端，\n是与你相遇的世界。',
-      body: '雾海之间，藏着尚未寄出的信，也藏着等待被听见的心事。循着微光出发，与沿途的旅伴相识，让每一次相遇成为故事的一部分。\n\n探索迷雾中的岛屿，收集散落的信件，与沿途的角色相遇。放慢脚步，让好奇心带你走向下一处风景。',
-      features: ['福瑞角色', '叙事冒险', '自由探索'],
+      title: '每一封来信，\n都藏着另一种真相。',
+      body: '一封没有署名的邮件，把你带回了地图上已经消失的小镇。潮湿的林间小路、停止走动的挂钟，还有那些似乎认识你的陌生身影——它们都在等待同一个收件人。\n\n拨开文字与记忆之间的迷雾，辨认同行者留下的痕迹。有些声音来自门外，有些则一直留在信封里面。',
+      features: ['福瑞角色', '悬疑叙事', '轻度惊悚'],
     },
     download: {
       enabled: true,
-      title: '下一封来信，\n等你亲手打开。',
-      description: '下一段旅程，期待与你一起出发。',
+      title: '午夜之前，\n请确认你的邮件。',
+      description: '安装包由外部下载平台提供。投递通道开放后，可在此领取。',
       buttonText: '下载游戏',
       url: '',
       version: '待发布',

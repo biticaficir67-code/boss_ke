@@ -5,6 +5,7 @@ import { defaultContent } from '../src/content/default-content.js';
 import { validateContent } from '../src/content/validation.js';
 import { validateState, imageRepositoryPath } from '../src/github/state.js';
 import { renderDocument, renderSite } from '../src/site/render.js';
+import { contentImages } from '../src/content/sections.js';
 
 test('当前正式内容和草稿发布指针一致，正式图片均存在', async () => {
   const state = validateState(
@@ -14,8 +15,50 @@ test('当前正式内容和草稿发布指针一致，正式图片均存在', as
     await fs.readFile(new URL('../site-content/published.json', import.meta.url), 'utf8'),
   );
   assert.deepEqual(state.published, published);
-  for (const slide of published.content.hero.slides)
-    await fs.access(new URL(`../${imageRepositoryPath(slide.src)}`, import.meta.url));
+  for (const src of contentImages(published.content))
+    await fs.access(new URL(`../${imageRepositoryPath(src)}`, import.meta.url));
+});
+
+test('旧版内容缺少扩展栏目时仍能读取，新栏目能完整保存且普通文字被转义', () => {
+  const legacy = defaultContent();
+  delete legacy.extra;
+  const clean = validateContent(legacy);
+  assert.deepEqual(clean.extra.characters, []);
+  assert.equal(clean.extra.story.enabled, false);
+  const extended = defaultContent();
+  extended.extra.characters[0].name = '<img src=x onerror=alert(1)>';
+  extended.extra.faq[0].answer = '<script>alert(1)</script>';
+  const validated = validateContent(extended);
+  assert.equal(validated.extra.updates[0].title, extended.extra.updates[0].title);
+  const html = renderSite(validated);
+  assert.ok(html.includes('&lt;img src=x onerror=alert(1)&gt;'));
+  assert.ok(!html.includes('<script>alert(1)</script>'));
+  assert.ok(!renderSite(clean).includes('id="characters"'));
+});
+
+test('扩展栏目拒绝不安全链接、错误日期、无标识条目和路径穿越', () => {
+  const invalid = [
+    (content) => {
+      content.extra.links = [{ id: 'link', label: '社区', url: 'javascript:alert(1)' }];
+    },
+    (content) => {
+      content.extra.characters[0].image = '/../../.env';
+    },
+    (content) => {
+      content.extra.updates[0].date = '2026-02-30';
+    },
+    (content) => {
+      delete content.extra.faq[0].id;
+    },
+    (content) => {
+      content.extra.characters = Array(7).fill(content.extra.characters[0]);
+    },
+  ];
+  for (const mutate of invalid) {
+    const content = defaultContent();
+    mutate(content);
+    assert.throws(() => validateContent(content));
+  }
 });
 
 test('内容验证拒绝不合法的下载地址、图片路径和轮播数量', () => {

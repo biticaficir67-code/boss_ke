@@ -3,6 +3,7 @@ import path from 'node:path';
 import { build } from 'vite';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import { contentImages } from '../src/content/sections.js';
 import { renderDocument } from '../src/site/render.js';
 import { validateContent } from '../src/content/validation.js';
 import { validateState, imageRepositoryPath } from '../src/github/state.js';
@@ -40,10 +41,10 @@ await fs.writeFile(
 await fs.copyFile(path.join(projectRoot, 'src/site/site.css'), path.join(output, 'site.css'));
 await fs.copyFile(path.join(projectRoot, 'src/site/runtime.js'), path.join(output, 'site.js'));
 await fs.copyFile(path.join(projectRoot, 'public/favicon.svg'), path.join(output, 'favicon.svg'));
-for (const slide of content.hero.slides)
+for (const src of contentImages(content))
   await fs.copyFile(
-    path.join(projectRoot, imageRepositoryPath(slide.src)),
-    path.join(output, 'assets', path.basename(slide.src)),
+    path.join(projectRoot, imageRepositoryPath(src)),
+    path.join(output, 'assets', path.basename(src)),
   );
 await fs.writeFile(
   path.join(output, 'deploy-info.json'),

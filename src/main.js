@@ -4,6 +4,7 @@ import App from './App.vue';
 import { notify } from './lib/notify.js';
 import { refreshAuth } from './lib/auth.js';
 import './styles.css';
+import './admin-theme.css';
 
 const router = createRouter({
   history: createWebHashHistory(),

@@ -4,6 +4,7 @@ export const githubConfig = {
   branch: import.meta.env.VITE_GITHUB_BRANCH || 'main',
 };
 export const websiteUrl = new URL('../', document.baseURI).href;
+export const siteAssetVersion = import.meta.env.VITE_SITE_ASSET_VERSION || '';
 const images = new Map();
 export function rememberImage(src, url) {
   if (images.get(src)?.startsWith('blob:')) URL.revokeObjectURL(images.get(src));
@@ -16,7 +17,7 @@ export function previewOptions() {
   return {
     preview: true,
     assetBase: new URL('site-assets/', document.baseURI).href,
-    assetVersion: import.meta.env.VITE_SITE_ASSET_VERSION || '',
+    assetVersion: siteAssetVersion,
     imageResolver: imageUrl,
   };
 }
