@@ -16,6 +16,7 @@ export function previewOptions() {
   return {
     preview: true,
     assetBase: new URL('site-assets/', document.baseURI).href,
+    assetVersion: import.meta.env.VITE_SITE_ASSET_VERSION || '',
     imageResolver: imageUrl,
   };
 }

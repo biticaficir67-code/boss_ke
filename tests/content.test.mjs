@@ -59,4 +59,15 @@ test('公开 HTML 与预览 HTML 使用各自正确的资源地址', () => {
   const preview = renderDocument(content, { preview: true, assetBase: '/preview-assets/' });
   assert.ok(preview.includes('/preview-assets/site.css'));
   assert.ok(preview.includes('noindex,nofollow'));
+  const versioned = renderDocument(content, { assetVersion: 'new-design' });
+  assert.ok(versioned.includes('./site.css?v=new-design'));
+  assert.ok(versioned.includes("from './site.js?v=new-design'"));
+  const versionedPreview = renderDocument(content, {
+    preview: true,
+    assetBase: '/repo/admin/site-assets/',
+    assetVersion: 'new-design',
+  });
+  assert.ok(versionedPreview.includes('/repo/admin/site-assets/site.css?v=new-design'));
+  // ZIP 自带资源，不依赖线上版本参数。
+  assert.ok(!published.includes('?v='));
 });

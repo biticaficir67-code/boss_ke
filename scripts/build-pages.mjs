@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { build } from 'vite';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { renderDocument } from '../src/site/render.js';
 import { validateContent } from '../src/content/validation.js';
 import { validateState, imageRepositoryPath } from '../src/github/state.js';
@@ -22,6 +23,11 @@ const [owner, repository] = (process.env.GITHUB_REPOSITORY || 'biticaficir67-cod
 );
 const branch = process.env.GITHUB_REF_NAME || 'main';
 if (!owner || !repository) throw new Error('GitHub 仓库配置不正确');
+// Pages 会缓存固定地址；样式或脚本变化时换一个版本，防止新 HTML 混用旧资源。
+const assetHash = createHash('sha256');
+for (const source of ['src/site/site.css', 'src/site/runtime.js', 'public/favicon.svg'])
+  assetHash.update(await fs.readFile(path.join(projectRoot, source)));
+const assetVersion = assetHash.digest('hex').slice(0, 12);
 // 固定生成目录，禁止由用户输入或环境变量决定递归清理目标。
 if (path.dirname(output) !== projectRoot || path.basename(output) !== 'pages-output')
   throw new Error('生成目录不正确');
@@ -29,7 +35,7 @@ await fs.rm(output, { recursive: true, force: true });
 await fs.mkdir(path.join(output, 'assets'), { recursive: true });
 await fs.writeFile(
   path.join(output, 'index.html'),
-  renderDocument(content, { editorHref: './admin/' }),
+  renderDocument(content, { editorHref: './admin/', assetVersion }),
 );
 await fs.copyFile(path.join(projectRoot, 'src/site/site.css'), path.join(output, 'site.css'));
 await fs.copyFile(path.join(projectRoot, 'src/site/runtime.js'), path.join(output, 'site.js'));
@@ -56,6 +62,7 @@ await build({
     'import.meta.env.VITE_GITHUB_OWNER': JSON.stringify(owner),
     'import.meta.env.VITE_GITHUB_REPOSITORY': JSON.stringify(repository),
     'import.meta.env.VITE_GITHUB_BRANCH': JSON.stringify(branch),
+    'import.meta.env.VITE_SITE_ASSET_VERSION': JSON.stringify(assetVersion),
   },
 });
 const adminDir = path.join(output, 'admin');

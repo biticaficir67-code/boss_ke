@@ -140,9 +140,10 @@ export function renderSite(
 
 export function renderDocument(
   content,
-  { preview = false, editorHref = '', assetBase, imageResolver } = {},
+  { preview = false, editorHref = '', assetBase, imageResolver, assetVersion = '' } = {},
 ) {
   const prefix = assetBase || (preview ? '/site-assets/' : './');
+  const version = assetVersion ? `?v=${encodeURIComponent(assetVersion)}` : '';
   return `<!doctype html>
 <html lang="zh-CN" class="site-document">
   <head>
@@ -152,13 +153,13 @@ export function renderDocument(
     <meta name="theme-color" content="#172f2b">
     ${preview ? '<meta name="robots" content="noindex,nofollow">' : ''}
     <title>${escapeHtml(content.brand.name)} · 游戏官网</title>
-    <link rel="icon" href="${preview ? `${prefix}../` : './'}favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="${prefix}site.css">
+    <link rel="icon" href="${preview ? `${prefix}../` : './'}favicon.svg${version}" type="image/svg+xml">
+    <link rel="stylesheet" href="${prefix}site.css${version}">
   </head>
   <body>
     ${renderSite(content, { staticAssets: !preview, editorLink: !!editorHref, editorHref, imageResolver })}
     <script type="module">
-      import { mountSite } from '${prefix}site.js';
+      import { mountSite } from '${prefix}site.js${version}';
       mountSite(document.querySelector('.game-site'));
     </script>
   </body>

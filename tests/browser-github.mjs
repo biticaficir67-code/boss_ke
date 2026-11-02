@@ -54,6 +54,18 @@ const base = `http://127.0.0.1:${server.address().port}/boss_ke/`;
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 try {
   const context = await browser.newContext();
+  // 模拟浏览器仍缓存着不带版本号的旧样式，新官网和预览必须避开该地址。
+  let staleStyleRequests = 0;
+  await context.route(
+    (url) => url.pathname.endsWith('/site.css'),
+    async (route) => {
+      if (!new URL(route.request().url()).searchParams.has('v')) {
+        staleStyleRequests++;
+        return route.fulfill({ contentType: 'text/css', body: '.gs-slides { position: static; }' });
+      }
+      return route.continue();
+    },
+  );
   await context.route('https://api.github.com/**', async (route) => {
     const request = route.request();
     const cors = {
@@ -82,6 +94,12 @@ try {
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto(base);
   await page.getByRole('heading', { name: /越过雾海/ }).waitFor();
+  assert.equal(
+    await page.locator('.gs-slides').evaluate((node) => getComputedStyle(node).position),
+    'absolute',
+  );
+  const stylesheetVersion = await page.locator('link[rel=stylesheet]').getAttribute('href');
+  assert.match(stylesheetVersion, /site\.css\?v=[a-f0-9]{12}$/);
   await fs.mkdir(path.join(projectRoot, 'test-results'), { recursive: true });
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.screenshot({
@@ -149,6 +167,10 @@ try {
   );
   const preview = page.frameLocator('.preview-panel iframe');
   await preview.getByRole('heading', { name: '网页修改，自动发布' }).waitFor();
+  assert.equal(
+    await preview.locator('.gs-slides').evaluate((node) => getComputedStyle(node).position),
+    'absolute',
+  );
   await page.getByRole('link', { name: '打开已保存草稿预览' }).click();
   await page.frameLocator('iframe').getByRole('heading', { name: '网页修改，自动发布' }).waitFor();
   await page.getByRole('link', { name: '← 返回工作台' }).click();
@@ -193,6 +215,7 @@ try {
     0,
   );
   assert.deepEqual(errors, []);
+  assert.equal(staleStyleRequests, 0, '官网和预览不应请求可能被缓存的无版本样式');
   await fs.mkdir(path.join(projectRoot, 'test-results'), { recursive: true });
   await page.screenshot({
     path: path.join(projectRoot, 'test-results/github-login.png'),
@@ -204,6 +227,7 @@ try {
         ok: true,
         checks: [
           '仓库子路径与图片',
+          '旧样式缓存隔离与预览资源版本',
           '画廊放大、键盘切换和焦点恢复',
           '缩略图切换与暂停',
           '手机布局和大图浏览',
