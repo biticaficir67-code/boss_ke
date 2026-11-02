@@ -6,6 +6,7 @@ import { validateContent } from '../src/content/validation.js';
 import { validateState, imageRepositoryPath } from '../src/github/state.js';
 import { renderDocument, renderSite } from '../src/site/render.js';
 import { contentImages } from '../src/content/sections.js';
+import { artwork } from '../src/content/artwork.js';
 
 test('当前正式内容和草稿发布指针一致，正式图片均存在', async () => {
   const state = validateState(
@@ -17,6 +18,13 @@ test('当前正式内容和草稿发布指针一致，正式图片均存在', as
   assert.deepEqual(state.published, published);
   for (const src of contentImages(published.content))
     await fs.access(new URL(`../${imageRepositoryPath(src)}`, import.meta.url));
+  for (const release of state.history)
+    for (const src of contentImages(release.content))
+      await fs.access(new URL(`../${imageRepositoryPath(src)}`, import.meta.url));
+  assert.deepEqual(
+    new Set(contentImages(published.content)),
+    new Set(artwork.map((image) => image.src)),
+  );
 });
 
 test('旧版内容缺少扩展栏目时仍能读取，新栏目能完整保存且普通文字被转义', () => {
@@ -97,7 +105,7 @@ test('官网保留文字转义，下载按钮由开关和地址决定', () => {
 test('公开 HTML 与预览 HTML 使用各自正确的资源地址', () => {
   const content = defaultContent();
   const published = renderDocument(content, { editorHref: './admin/' });
-  assert.ok(published.includes('./assets/island.svg'));
+  assert.ok(published.includes('./assets/arrival.webp'));
   assert.ok(published.includes('href="./admin/"'));
   const preview = renderDocument(content, { preview: true, assetBase: '/preview-assets/' });
   assert.ok(preview.includes('/preview-assets/site.css'));

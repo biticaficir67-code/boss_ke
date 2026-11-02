@@ -82,7 +82,7 @@ test('GitHub 素材与内容原子提交、路径校验和历史恢复', async (
     id: published.history[1].id,
     expectedRevision: 2,
   });
-  assert.equal(restored.content.hero.slides[0].src, '/sample-art/island.svg');
+  assert.equal(restored.content.hero.slides[0].src, '/artwork/arrival.webp');
   assert.equal(restored.published.content.hero.slides[0].src, record.src);
   assert.throws(() => imageRepositoryPath('/../../.env'), /不支持/);
 });

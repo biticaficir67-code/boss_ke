@@ -14,7 +14,7 @@ export function text(value, label, max, { required = true } = {}) {
   return result;
 }
 export const imagePattern =
-  /^\/(?:sample-art\/(?:(?:island|forest|journey)\.svg|post-office\.webp)|uploads\/[a-f0-9-]{36}\.(?:png|jpg|webp))$/;
+  /^\/(?:artwork\/(?:arrival|forest-road|sorting-room|lighthouse|dead-letter|receiver|courier)\.webp|sample-art\/(?:(?:island|forest|journey)\.svg|post-office\.webp)|uploads\/[a-f0-9-]{36}\.(?:png|jpg|webp))$/;
 const isRecord = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
 
 function validateSections(raw = emptySections()) {

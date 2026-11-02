@@ -26,7 +26,7 @@ export function defaultSections() {
         role: '档案 01 · 身份待确认',
         quote: '信上写着我的名字，可我从未来过这里。',
         body: '带着一封陌生邮件踏入雾中的旅人。被擦去的寄件地址，似乎指向一段不属于自己的记忆。',
-        image: '/sample-art/forest.svg',
+        image: '/artwork/receiver.webp',
       },
       {
         id: 'courier',
@@ -34,7 +34,7 @@ export function defaultSections() {
         role: '档案 02 · 投递记录缺失',
         quote: '有些邮件，最好永远不要拆开。',
         body: '总在熄灯之后出现的身影。他熟悉每一条林间小路，却从不回答关于旧邮局的问题。',
-        image: '/sample-art/island.svg',
+        image: '/artwork/courier.webp',
       },
     ],
     gameplay: [

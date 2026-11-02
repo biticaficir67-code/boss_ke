@@ -1,4 +1,5 @@
 import { defaultSections } from './sections.js';
+import { sceneArtwork } from './artwork.js';
 
 export function defaultContent() {
   return {
@@ -15,26 +16,7 @@ export function defaultContent() {
       title: '这封邮件，\n不该由你收到。',
       subtitle: '寄件人不存在，收件地址却是你的家。夜雾里，那座早已停业的邮局，又亮起了灯。',
       interval: 5500,
-      slides: [
-        {
-          id: 'scene-1',
-          src: '/sample-art/island.svg',
-          alt: '暮色海面上，一座亮着灯的孤岛',
-          caption: '01 / 在潮汐之间',
-        },
-        {
-          id: 'scene-2',
-          src: '/sample-art/forest.svg',
-          alt: '星光落入幽静的森林与山谷',
-          caption: '02 / 听见森林的呼吸',
-        },
-        {
-          id: 'scene-3',
-          src: '/sample-art/journey.svg',
-          alt: '旅人沿着沙丘走向远方的遗迹',
-          caption: '03 / 抵达故事的另一端',
-        },
-      ],
+      slides: sceneArtwork.map(({ id, src, alt, caption }) => ({ id, src, alt, caption })),
     },
     about: {
       eyebrow: '关于这段旅程',

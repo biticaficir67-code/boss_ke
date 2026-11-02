@@ -5,6 +5,7 @@ import Icon from '../components/Icon.vue';
 import ExtendedEditor from '../components/ExtendedEditor.vue';
 import { validateContent } from '../content/validation.js';
 import { contentImages } from '../content/sections.js';
+import { artwork } from '../content/artwork.js';
 import { request } from '../lib/api.js';
 import { auth, acceptAuth } from '../lib/auth.js';
 import { notify } from '../lib/notify.js';
@@ -63,17 +64,7 @@ async function checkDeployment() {
   online.value = deployed.releaseId === meta.value.releaseId;
 }
 const selectedImages = computed(() => (form.value ? contentImages(form.value) : []));
-const samples = [
-  {
-    id: 'concept-post-office',
-    name: '概念 · 夜雾邮局',
-    src: '/sample-art/post-office.webp',
-    sample: true,
-  },
-  { id: 'sample-island', name: '演示 · 潮汐孤岛', src: '/sample-art/island.svg', sample: true },
-  { id: 'sample-forest', name: '演示 · 林间星光', src: '/sample-art/forest.svg', sample: true },
-  { id: 'sample-journey', name: '演示 · 远行沙丘', src: '/sample-art/journey.svg', sample: true },
-];
+const samples = artwork.map((image) => ({ ...image, sample: true }));
 const allImages = computed(() => [...uploads.value, ...samples]);
 const source = computed(() => (form.value ? renderDocument(form.value) : ''));
 let previewTimer;
@@ -915,14 +906,14 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
               </article>
             </div>
             <div class="section-subheading">
-              <h2>内置演示素材</h2>
+              <h2>游戏美术素材</h2>
             </div>
             <div class="media-grid">
               <article v-for="image in samples" :key="image.id" class="panel media-card">
                 <img :src="imageUrl(image.src)" :alt="image.name" />
                 <div>
                   <strong>{{ image.name }}</strong
-                  ><span>项目内置 SVG 插画</span>
+                  ><span>{{ image.kind === 'character' ? '角色概念立绘' : '场景概念视觉' }}</span>
                 </div>
               </article>
             </div></template
@@ -964,7 +955,7 @@ onUnmounted(() => window.removeEventListener('keydown', onEscape));
         <header>
           <div>
             <h2 id="picker-title">选择轮播画面</h2>
-            <p>选择上传素材或内置演示插画。</p>
+            <p>选择上传图片或游戏美术素材。</p>
           </div>
           <button class="icon-button" aria-label="关闭图片选择器" @click="picker = null">
             <Icon name="close" />

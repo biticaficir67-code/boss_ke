@@ -1,7 +1,7 @@
 {
-  "id": "1793634035794-59693da8",
-  "createdAt": "2026-11-02T15:40:35.794Z",
-  "revision": 5,
+  "id": "1793635074972-f8f8ded5",
+  "createdAt": "2026-11-02T15:57:54.989Z",
+  "revision": 6,
   "content": {
     "schemaVersion": 1,
     "extra": {
@@ -18,7 +18,7 @@
           "role": "档案 01 · 身份待确认",
           "quote": "信上写着我的名字，可我从未来过这里。",
           "body": "带着一封陌生邮件踏入雾中的旅人。被擦去的寄件地址，似乎指向一段不属于自己的记忆。",
-          "image": "/uploads/f7443860-1aa3-4893-b79f-4c2d1207754c.webp"
+          "image": "/artwork/receiver.webp"
         },
         {
           "id": "courier",
@@ -26,7 +26,7 @@
           "role": "档案 02 · 投递记录缺失",
           "quote": "有些邮件，最好永远不要拆开。",
           "body": "总在熄灯之后出现的身影。他熟悉每一条林间小路，却从不回答关于旧邮局的问题。",
-          "image": "/sample-art/post-office.webp"
+          "image": "/artwork/courier.webp"
         }
       ],
       "gameplay": [
@@ -104,34 +104,34 @@
       "interval": 5500,
       "slides": [
         {
-          "id": "concept-post-office",
-          "src": "/sample-art/post-office.webp",
-          "alt": "夜雾中的旧邮局与福瑞投递员，概念视觉",
-          "caption": "概念视觉 / 夜雾邮局"
+          "id": "arrival",
+          "src": "/artwork/arrival.webp",
+          "alt": "午夜的林间邮局，灰狼投递员提灯等候",
+          "caption": "01 / 夜雾邮局 · 概念视觉"
         },
         {
-          "id": "90118d40-0c37-4644-8063-11150d440d29",
-          "src": "/uploads/f7443860-1aa3-4893-b79f-4c2d1207754c.webp",
-          "alt": "战桃",
-          "caption": "04 / 愿与你同行"
+          "id": "forest-road",
+          "src": "/artwork/forest-road.webp",
+          "alt": "雪豹收件人走进被迷雾遮蔽的森林小路",
+          "caption": "02 / 迷途林道 · 概念视觉"
         },
         {
-          "id": "scene-1",
-          "src": "/sample-art/island.svg",
-          "alt": "暮色海面上，一座亮着灯的孤岛",
-          "caption": "01 / 在潮汐之间"
+          "id": "sorting-room",
+          "src": "/artwork/sorting-room.webp",
+          "alt": "旧邮局分拣室的信格、油灯与未拆封的邮件",
+          "caption": "03 / 午夜分拣室 · 概念视觉"
         },
         {
-          "id": "scene-2",
-          "src": "/sample-art/forest.svg",
-          "alt": "星光落入幽静的森林与山谷",
-          "caption": "02 / 听见森林的呼吸"
+          "id": "lighthouse",
+          "src": "/artwork/lighthouse.webp",
+          "alt": "海雾中的孤独灯塔与微亮的投递站",
+          "caption": "04 / 雾岸灯塔 · 概念视觉"
         },
         {
-          "id": "scene-3",
-          "src": "/sample-art/journey.svg",
-          "alt": "旅人沿着沙丘走向远方的遗迹",
-          "caption": "03 / 抵达故事的另一端"
+          "id": "dead-letter",
+          "src": "/artwork/dead-letter.webp",
+          "alt": "档案桌上的无署名信封、爪印蜡封与旧钥匙",
+          "caption": "05 / 未投递的来信 · 概念视觉"
         }
       ]
     },

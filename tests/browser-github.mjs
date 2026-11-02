@@ -8,23 +8,27 @@ import { fileURLToPath } from 'node:url';
 const projectRoot = fileURLToPath(new URL('..', import.meta.url));
 import { decodeText } from '../src/github/repository.js';
 import { publishedPath } from '../src/github/state.js';
+import { artwork } from '../src/content/artwork.js';
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const fixture = githubFixture(
   await Promise.all(
-    ['island.svg', 'forest.svg', 'journey.svg', 'post-office.webp'].map(async (name) => [
-      `public/sample-art/${name}`,
-      (await fs.readFile(path.join(projectRoot, 'public/sample-art', name))).toString('base64'),
+    artwork.map(async (image) => [
+      `public${image.src}`,
+      (await fs.readFile(path.join(projectRoot, 'public', image.src.slice(1)))).toString('base64'),
     ]),
   ),
 );
 const output = path.join(projectRoot, 'pages-output');
+const initialSlideCount = JSON.parse(decodeText(fixture.files().get(publishedPath))).content.hero
+  .slides.length;
 const mime = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript',
   '.css': 'text/css',
   '.svg': 'image/svg+xml',
   '.json': 'application/json',
+  '.webp': 'image/webp',
 };
 let deployed;
 const server = http.createServer(async (req, res) => {
@@ -190,6 +194,7 @@ try {
   await page.getByRole('button', { name: '进入工作台' }).click();
   await page.waitForFunction(() => !document.querySelector('.login-submit')?.disabled);
   await page.getByRole('heading', { name: '内容概览', exact: true }).waitFor();
+  await page.locator('.welcome-art img').evaluate((image) => image.decode());
   await page.screenshot({
     path: path.join(projectRoot, 'test-results/furry-admin.png'),
     fullPage: true,
@@ -202,10 +207,7 @@ try {
   await page.getByRole('button', { name: '剧情与角色', exact: true }).click();
   await page.getByLabel('来信标题', { exact: true }).fill('请确认你的测试邮件');
   await page.getByLabel('角色名称', { exact: true }).first().fill('测试收件人');
-  await page
-    .getByLabel('角色图片', { exact: true })
-    .nth(1)
-    .selectOption('/sample-art/post-office.webp');
+  await page.getByLabel('角色图片', { exact: true }).nth(1).selectOption('/artwork/receiver.webp');
   await page.getByRole('button', { name: '添加玩法介绍', exact: true }).click();
   await page.getByLabel('玩法标题', { exact: true }).last().fill('记忆回溯');
   await page.getByLabel('玩法介绍', { exact: true }).last().fill('新增玩法说明测试');
@@ -255,7 +257,8 @@ try {
   ]);
   const { unzipSync } = require('fflate');
   const files = unzipSync(await fs.readFile(await zip.path()));
-  assert.ok(files['assets/post-office.webp'], '只用于角色的图片也必须进入 ZIP');
+  assert.ok(files['assets/receiver.webp'], '只用于角色的图片也必须进入 ZIP');
+  assert.equal(deployed.content.extra.characters[1].image, '/artwork/receiver.webp');
   assert.ok(new TextDecoder().decode(files['site.css']).includes('.gs-slides'));
   assert.ok(new TextDecoder().decode(files['index.html']).includes('新版本动态测试'));
   await page.getByRole('button', { name: '图片素材', exact: true }).click();
@@ -276,7 +279,7 @@ try {
   await page.getByRole('button', { name: '首页轮播', exact: false }).first().click();
   await page.getByRole('button', { name: '从素材库添加', exact: true }).click();
   await page.getByRole('button', { name: /github-test\.png/ }).click();
-  assert.equal(await page.locator('.slide-editor').count(), 4);
+  assert.equal(await page.locator('.slide-editor').count(), initialSlideCount + 1);
   await page.getByRole('button', { name: '保存草稿', exact: true }).click();
   await page.getByText('草稿已保存，正式官网尚未改变', { exact: true }).waitFor();
   await page.reload();
